@@ -1,7 +1,4 @@
-package com.example.demodatabase;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         String mssv = edtMSSV.getText().toString();
         String tensv = edtTENSV.getText().toString();
-        
+
         boolean gioitinh = cbNam.isChecked();
 
         if (mssv.isEmpty() || tensv.isEmpty()) {
@@ -133,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
         values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);
         values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
 
-        long result = db.insert(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null, values);db.close();
+        long result = db.insert(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null, values);
+        db.close();
 
         if (result > 0) {
             Toast.makeText(this, "Thêm sinh viên thành công", Toast.LENGTH_SHORT).show();
@@ -207,9 +205,14 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
         TextInputEditText edtTENSV = findViewById(R.id.edtTENSV);
         CheckBox cbNam = findViewById(R.id.cbNam);
+        CheckBox cbNu = findViewById(R.id.cbNu); // Thêm cbNu vào đây
 
         edtMSSV.setText("");
         edtTENSV.setText("");
-        cbNam.setChecked(true);
+        cbNam.setChecked(false); // Reset cbNam về trạng thái chưa được chọn
+        cbNu.setChecked(false); // Reset cbNu về trạng thái chưa được chọn
+        cbNam.setEnabled(true); // Kích hoạt lại cbNam
+        cbNu.setEnabled(true); // Kích hoạt lại cbNu
     }
+
 }

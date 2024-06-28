@@ -5,14 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="MainActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="QUẢN LÍ SINH VIÊN"
-        android:textSize="18dp"
+        android:textStyle="bold|normal"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -44,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="90dp"
         android:hint="Nam"
+        android:textColorHint="@color/DarkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTENSV" />
 
@@ -53,11 +55,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:hint="Nữ"
+        android:textColorHint="@color/DarkGray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTENSV" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnThem"
+        android:background="@drawable/btnbg"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Thêm"
@@ -66,6 +70,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSua"
+        android:background="@drawable/btnbg"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
@@ -78,6 +83,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnXoa"
+        android:background="@drawable/btnbg"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Xóa"
@@ -92,7 +98,8 @@
         android:gravity="center"
         android:lineHeight="40dp"
         android:text="DANH SÁCH SINH VIÊN"
-        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSua" />
