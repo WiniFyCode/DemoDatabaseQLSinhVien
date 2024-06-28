@@ -1,3 +1,5 @@
+package com.example.demodatabase;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -11,7 +13,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.demodatabase.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;

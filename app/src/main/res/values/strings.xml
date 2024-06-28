@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">DemoDatabase</string>
+    <string name="quan_li_sinh_vien">QUẢN LÍ SINH VIÊN</string>
+    <string name="nhap_ma_so">Nhập mã số</string>
+    <string name="nhap_ten_sinh_vien">Nhập tên sinh viên</string>
+    <string name="nam">Nam</string>
+    <string name="nu">Nữ</string>
+    <string name="gioi_tinh">Giới tính</string>
+    <string name="them">Thêm</string>
+    <string name="sua">Sửa</string>
+    <string name="xoa">Xóa</string>
+    <string name="danh_sach_sinh_vien">DANH SÁCH SINH VIÊN</string>
 </resources>

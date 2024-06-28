@@ -5,15 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="MainActivity">
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="QUẢN LÍ SINH VIÊN"
+        android:text="@string/quan_li_sinh_vien"
         android:textStyle="bold|normal"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -25,7 +25,7 @@
         android:id="@+id/edtMSSV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập mã số"
+        android:hint="@string/nhap_ma_so"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -34,7 +34,7 @@
         android:id="@+id/edtTENSV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập tên sinh viên"
+        android:hint="@string/nhap_ten_sinh_vien"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtMSSV" />
@@ -44,7 +44,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="90dp"
-        android:hint="Nam"
+        android:hint="@string/nam"
         android:textColorHint="@color/DarkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTENSV" />
@@ -54,7 +54,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
-        android:hint="Nữ"
+        android:hint="@string/nu"
         android:textColorHint="@color/DarkGray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTENSV" />
@@ -64,7 +64,7 @@
         android:background="@drawable/btnbg"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="Thêm"
+        android:text="@string/them"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnSua" />
 
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
         android:layout_marginTop="68dp"
-        android:text="Sửa"
+        android:text="@string/sua"
         app:layout_constraintEnd_toStartOf="@+id/btnXoa"
         app:layout_constraintHorizontal_bias="0.011"
         app:layout_constraintStart_toEndOf="@+id/btnThem"
@@ -86,7 +86,7 @@
         android:background="@drawable/btnbg"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="Xóa"
+        android:text="@string/xoa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnSua" />
 
@@ -96,10 +96,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:lineHeight="40dp"
-        android:text="DANH SÁCH SINH VIÊN"
+        android:text="@string/danh_sach_sinh_vien"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSua" />
