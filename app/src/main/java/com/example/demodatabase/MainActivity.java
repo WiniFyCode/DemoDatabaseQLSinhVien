@@ -24,120 +24,135 @@ import ChucNang.SinhVienComparator;
 import SQLite.QLSinhVien_OpenHelper;
 import model.SINHVIEN;
 
-public class MainActivity extends AppCompatActivity {
-
-    QLSinhVien_OpenHelper dbHelper;
-    ListView listView;
-    SinhVienAdapter adapter;
-    List<SINHVIEN> sinhVienList;
+public class MainActivity extends AppCompatActivity {QLSinhVien_OpenHelper dbHelper; // Helper để tương tác với cơ sở dữ liệu
+    ListView listView; // ListView để hiển thị danh sách sinh viên
+    SinhVienAdapter adapter; // Adapter để quản lý dữ liệu cho ListView
+    List<SINHVIEN> sinhVienList; // Danh sách các đối tượng SINHVIEN
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // Đặt layout cho Activity
 
+        // Khởi tạo các thành phần
         dbHelper = new QLSinhVien_OpenHelper(this);
-        listView = findViewById(R.id.lvSinhVien); // Thay thế bằng ID của ListView trong activity_main.xml
+        listView = findViewById(R.id.lvSinhVien);
         sinhVienList = new ArrayList<>();
         adapter = new SinhVienAdapter(this, R.layout.item_sinhvien, sinhVienList);
         listView.setAdapter(adapter);
 
-        loadData();
+        loadData(); // Tải dữ liệu từ cơ sở dữ liệu và hiển thị lên ListView
 
+        // Lấy các nút từ layout
         Button btnThem = findViewById(R.id.btnThem);
         Button btnSua = findViewById(R.id.btnSua);
         Button btnXoa = findViewById(R.id.btnXoa);
 
-        // Đăng ký sự kiện cho các nút
-        CheckBox cbNam = findViewById(R.id.cbNam); // Thay thế bằng ID của CheckBox Nam
-        CheckBox cbNu = findViewById(R.id.cbNu); // Thay thế bằng ID của CheckBox Nữ
+        // Lấy các CheckBox từ layout
+        CheckBox cbNam = findViewById(R.id.cbNam);
+        CheckBox cbNu = findViewById(R.id.cbNu);
 
+        // Đăng ký sự kiện click cho nút Thêm
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                themSinhVien();
+                themSinhVien(); // Thêm sinh viên mới vào cơ sở dữ liệu
             }
         });
 
+        // Đăng ký sự kiện click cho nút Sửa
         btnSua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                suaSinhVien();
+                suaSinhVien(); // Sửa thông tin sinh viên trong cơ sở dữ liệu
             }
         });
 
+        // Đăng ký sự kiện click cho nút Xóa
         btnXoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xoaSinhVien();
+                xoaSinhVien(); // Xóa sinh viên khỏi cơ sở dữ liệu
             }
         });
 
-
+        // Đăng ký sự kiện thay đổi trạng thái cho CheckBox Nam
         cbNam.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cbNu.setEnabled(!isChecked); // Vô hiệu hóa cbNu khi cbNam được chọn, và kích hoạt lại khi cbNam bị bỏ chọn
+                cbNu.setEnabled(!isChecked); // Vô hiệu hóa CheckBox Nữ khi CheckBox Nam được chọn
             }
         });
 
+        // Đăng ký sự kiện thay đổi trạng thái cho CheckBox Nữ
         cbNu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cbNam.setEnabled(!isChecked); // Vô hiệu hóa cbNam khi cbNu được chọn, và kích hoạt lại khi cbNu bị bỏ chọn
+                cbNam.setEnabled(!isChecked); // Vô hiệu hóa CheckBox Nam khi CheckBox Nữ được chọn
             }
         });
     }
 
+    // Tải dữ liệu từ cơ sở dữ liệu và hiển thị lên ListView
     private void loadData() {
-        sinhVienList.clear();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        sinhVienList.clear(); // Xóa dữ liệu cũ trong danh sách
+        SQLiteDatabase db = dbHelper.getReadableDatabase(); // Mở cơ sở dữ liệu ở chế độ đọc
 
-        Cursor cursor = db.query(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null, null, null, null, null, null);
+        // Truy vấn tất cả các sinh viên từ bảng SINHVIEN
+        Cursor cursor = db.query(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null,null, null, null, null, null);
         while (cursor.moveToNext()) {
+            // Lấy dữ liệu từ Cursor
             String mssv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_MSSV));
             String tensv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_TENSV));
             boolean gioitinh = cursor.getInt(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_GIOITINH)) == 1;
+
+            // Thêm sinh viên vào danh sách
             sinhVienList.add(new SINHVIEN(mssv, tensv, gioitinh));
         }
-        //Comparator
+
+        // Sắp xếp danh sách sinh viên theo MSSV
         Collections.sort(sinhVienList, new SinhVienComparator());
 
-        cursor.close();
-        db.close();
-        adapter.notifyDataSetChanged();
+        cursor.close(); // Đóng Cursor
+        db.close(); // Đóng cơ sở dữ liệu
+        adapter.notifyDataSetChanged(); // Cập nhật ListView
     }
 
+    // Thêm sinh viên mới vào cơ sở dữ liệu
     private void themSinhVien() {
+        // Lấy dữ liệu từ các trường nhập liệu
         TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
         TextInputEditText edtTENSV = findViewById(R.id.edtTENSV);
-
         CheckBox cbNam = findViewById(R.id.cbNam);
         CheckBox cbNu = findViewById(R.id.cbNu);
 
         String mssv = edtMSSV.getText().toString();
         String tensv = edtTENSV.getText().toString();
-
         boolean gioitinh = cbNam.isChecked();
 
+        // Kiểm tra xem các trường nhập liệu có trống không
         if (mssv.isEmpty() || tensv.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Mở cơ sở dữ liệu ở chế độ ghi
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Tạo một ContentValues để lưu trữ dữ liệu sinh viên
         ContentValues values = new ContentValues();
         values.put(QLSinhVien_OpenHelper.COLUMN_MSSV, mssv);
-        values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);
-        values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
+        values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
 
+        // Thêm sinh viên vào cơ sở dữ liệu
         long result = db.insert(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null, values);
-        db.close();
+        db.close(); // Đóng cơ sở dữ liệu
 
+        // Kiểm tra kết quả thêm sinh viên
         if (result > 0) {
             Toast.makeText(this, "Thêm sinh viên thành công", Toast.LENGTH_SHORT).show();
-            loadData();
-            clearInputFields();
+            loadData(); // Tải lại dữ liệu và cập nhật ListView
+            clearInputFields(); // Xóa các trường nhập liệu
         } else {
             Toast.makeText(this, "Thêm sinh viên thất bại", Toast.LENGTH_SHORT).show();
         }
@@ -145,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
         // Kích hoạt lại các CheckBox
         cbNam.setEnabled(true);
         cbNu.setEnabled(true);
-
-        // Cập nhật ListView
     }
 
+    // Sửa thông tin sinh viên trong cơ sở dữ liệu
     private void suaSinhVien() {
+        // Lấy dữ liệu từ các trường nhập liệu
         TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
         TextInputEditText edtTENSV = findViewById(R.id.edtTENSV);
         CheckBox cbNam = findViewById(R.id.cbNam);
@@ -158,62 +173,72 @@ public class MainActivity extends AppCompatActivity {
         String tensv = edtTENSV.getText().toString();
         boolean gioitinh = cbNam.isChecked();
 
+        // Kiểm tra xem các trường nhập liệu có trống không
         if (mssv.isEmpty() || tensv.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Mở cơ sở dữ liệu ở chế độ ghi
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Tạo một ContentValues để lưu trữ dữ liệu sinh viên
         ContentValues values = new ContentValues();
         values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);
         values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
 
+        // Cập nhật thông tin sinh viêntrong cơ sở dữ liệu
         int result = db.update(QLSinhVien_OpenHelper.TABLE_SINHVIEN, values, QLSinhVien_OpenHelper.COLUMN_MSSV + "= ?", new String[]{mssv});
-        db.close();
-
+        db.close(); // Đóng cơ sở dữ liệu// Kiểm tra kết quả sửa sinh viên
         if (result > 0) {
             Toast.makeText(this, "Sửa sinh viên thành công", Toast.LENGTH_SHORT).show();
-            loadData();
-            clearInputFields();
+            loadData(); // Tải lại dữ liệu và cập nhật ListView
+            clearInputFields(); // Xóa các trường nhập liệu
         } else {
             Toast.makeText(this, "Sửa sinh viên thất bại", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void xoaSinhVien() {
+    // Xóa sinh viên khỏi cơ sở dữ liệu
+    private void xoaSinhVien() {// Lấy MSSV từ trường nhập liệu
         TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
         String mssv = edtMSSV.getText().toString();
 
+        // Kiểm tra xem MSSV có trống không
         if (mssv.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập MSSV để xóa", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Mở cơ sở dữ liệu ở chế độ ghi
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int result = db.delete(QLSinhVien_OpenHelper.TABLE_SINHVIEN, QLSinhVien_OpenHelper.COLUMN_MSSV + " = ?", new String[]{mssv});
-        db.close();
 
+        // Xóa sinh viên khỏi cơ sở dữ liệu
+        int result = db.delete(QLSinhVien_OpenHelper.TABLE_SINHVIEN, QLSinhVien_OpenHelper.COLUMN_MSSV + " = ?", new String[]{mssv});
+        db.close(); // Đóng cơ sở dữ liệu
+
+        // Kiểm tra kết quả xóa sinh viên
         if (result > 0) {
             Toast.makeText(this, "Xóa sinh viên thành công", Toast.LENGTH_SHORT).show();
-            loadData();
-            clearInputFields();
+            loadData(); // Tải lại dữ liệu và cập nhật ListView
+            clearInputFields(); // Xóa các trường nhập liệu
         } else {
             Toast.makeText(this, "Xóa sinh viên thất bại", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Xóa các trường nhập liệu và reset các CheckBox
     private void clearInputFields() {
         TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
         TextInputEditText edtTENSV = findViewById(R.id.edtTENSV);
         CheckBox cbNam = findViewById(R.id.cbNam);
-        CheckBox cbNu = findViewById(R.id.cbNu); // Thêm cbNu vào đây
+        CheckBox cbNu = findViewById(R.id.cbNu);
 
-        edtMSSV.setText("");
-        edtTENSV.setText("");
-        cbNam.setChecked(false); // Reset cbNam về trạng thái chưa được chọn
-        cbNu.setChecked(false); // Reset cbNu về trạng thái chưa được chọn
-        cbNam.setEnabled(true); // Kích hoạt lại cbNam
-        cbNu.setEnabled(true); // Kích hoạt lại cbNu
+        edtMSSV.setText(""); // Xóa nội dung của trường MSSV
+        edtTENSV.setText(""); // Xóa nội dung của trường TENSV
+        cbNam.setChecked(false); // Bỏ chọn CheckBox Nam
+        cbNu.setChecked(false); // Bỏ chọn CheckBox Nữ
+        cbNam.setEnabled(true); // Kích hoạt CheckBox Nam
+        cbNu.setEnabled(true); // Kích hoạt CheckBox Nữ
     }
-
 }

@@ -17,38 +17,49 @@ import java.util.List;
 
 import model.SINHVIEN;
 
+// Adapter để hiển thị danh sách sinh viên trong ListView
 public class SinhVienAdapter extends ArrayAdapter<SINHVIEN> {
 
-    public SinhVienAdapter(@NonNull Context context, int resource, @NonNull List<SINHVIEN> objects) {super(context, resource, objects);
+    // Constructor của adapter
+    public SinhVienAdapter(@NonNull Context context, int resource, @NonNull List<SINHVIEN> objects) {
+        super(context, resource, objects);
     }
 
+    // Phương thức được gọi để tạoView cho mỗi mục trong ListView
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
+        View view = convertView; // Tái sử dụng View nếu có thể
         if (view == null) {
+            // Tạo View mới từ layout item_sinhvien.xml
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_sinhvien, parent, false);
         }
 
+        // Lấy đối tượng SINHVIEN tại vị trí position
         SINHVIEN sinhVien = getItem(position);
         if (sinhVien != null) {
+            // Lấy các thành phần View từ layout item_sinhvien.xml
             TextView tvMasv = view.findViewById(R.id.tvMasv);
             TextView tvTensv = view.findViewById(R.id.tvTensv);
             ImageView imgGioitinh = view.findViewById(R.id.imgGioiTinh);
 
+            // Hiển thị MSSV và tên sinh viên
             tvMasv.setText(sinhVien.MSSV);
             tvTensv.setText(sinhVien.TENSV);
 
-            // Set hình ảnh cho ImageView dựa trên giới tính (sinhVien.GIOITINH)
+            // Hiển thị hình ảnh giới tính
             imgGioitinh.setImageResource(sinhVien.GIOITINH ? R.drawable.male : R.drawable.female);
+            // Nếu sinhVien.GIOITINH là true, hiển thị hình ảnh nam (R.drawable.male)
+            // Nếu sinhVien.GIOITINH là false, hiển thị hình ảnh nữ (R.drawable.female)
 
-            // Set hình ảnh cho ImageView dựa trên giới tính (sinhVien.GIOITINH) cách 2
-//            if (sinhVien.GIOITINH) {
-//                imgGioitinh.setImageResource(R.drawable.male); // Thay R.drawable.male bằng ID của hình ảnh nam
-//            } else {
-//                imgGioitinh.setImageResource(R.drawable.female); // Thay R.drawable.female bằng ID của hình ảnh nữ
-//            }
+            // Cách 2 để hiển thị hình ảnh giới tính (đã được comment out)
+            // if (sinhVien.GIOITINH) {
+            //     imgGioitinh.setImageResource(R.drawable.male);
+            // } else {
+            //     imgGioitinh.setImageResource(R.drawable.female);
+            // }
         }
-        return view;
+
+        return view; // Trả về View đã được tạo hoặc tái sử dụng
     }
 }
