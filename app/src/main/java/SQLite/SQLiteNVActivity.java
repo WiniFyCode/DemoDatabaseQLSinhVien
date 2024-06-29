@@ -56,9 +56,9 @@ public class SQLiteNVActivity extends AppCompatActivity {
         }
 
         // Đọc dữ liệu từ cơ sở dữ liệu
-        Cursor cursor = database.query("NHANVIEN", null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            // Lấy thông tin nhân viên và thêm vào danh sách dulieu
+            Cursor cursor = database.query("NHANVIEN", null, null, null, null, null, null);
+            while (cursor.moveToNext()) {
+                // Lấy thông tin nhân viên và thêm vào danh sách dulieu
             String tam = cursor.getString(0) + " - " + cursor.getString(cursor.getColumnIndexOrThrow("TENNV")) + " - " + cursor.getString(cursor.getColumnIndexOrThrow("LUONG"));
             dulieu.add(tam);
         }
