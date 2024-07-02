@@ -47,17 +47,19 @@ public class SinhVienAdapter extends ArrayAdapter<SINHVIEN> {
             tvMasv.setText(sinhVien.MSSV);
             tvTensv.setText(sinhVien.TENSV);
 
-            // Hiển thị hình ảnh giới tính
+            // Cách 1 để hiển thị hình ảnh giới tính
             imgGioitinh.setImageResource(sinhVien.GIOITINH ? R.drawable.male : R.drawable.female);
-            // Nếu sinhVien.GIOITINH là true, hiển thị hình ảnh nam (R.drawable.male)
-            // Nếu sinhVien.GIOITINH là false, hiển thị hình ảnh nữ (R.drawable.female)
 
-            // Cách 2 để hiển thị hình ảnh giới tính (đã được comment out)
+            // Cách 2 để hiển thị hình ảnh giới tính
             // if (sinhVien.GIOITINH) {
             //     imgGioitinh.setImageResource(R.drawable.male);
             // } else {
             //     imgGioitinh.setImageResource(R.drawable.female);
             // }
+
+            // Nếu sinhVien.GIOITINH là true, hiển thị hình ảnh nam (R.drawable.male)
+            // Nếu sinhVien.GIOITINH là false, hiển thị hình ảnh nữ (R.drawable.female)
+
         }
 
         return view; // Trả về View đã được tạo hoặc tái sử dụng

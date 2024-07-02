@@ -24,7 +24,10 @@ import ChucNang.SinhVienComparator;
 import SQLite.QLSinhVien_OpenHelper;
 import model.SINHVIEN;
 
-public class MainActivity extends AppCompatActivity {QLSinhVien_OpenHelper dbHelper; // Helper để tương tác với cơ sở dữ liệu
+// Khai báo lớp MainActivity kế thừa từ AppCompatActivity
+public class MainActivity extends AppCompatActivity {
+    // Khai báo các biến thành viên
+    QLSinhVien_OpenHelper dbHelper; // Helper để tương tác với cơ sở dữ liệu
     ListView listView; // ListView để hiển thị danh sách sinh viên
     SinhVienAdapter adapter; // Adapter để quản lý dữ liệu cho ListView
     List<SINHVIEN> sinhVienList; // Danh sách các đối tượng SINHVIEN
@@ -35,11 +38,16 @@ public class MainActivity extends AppCompatActivity {QLSinhVien_OpenHelper dbHel
         setContentView(R.layout.activity_main); // Đặt layout cho Activity
 
         // Khởi tạo các thành phần
-        dbHelper = new QLSinhVien_OpenHelper(this);
-        listView = findViewById(R.id.lvSinhVien);
-        sinhVienList = new ArrayList<>();
-        adapter = new SinhVienAdapter(this, R.layout.item_sinhvien, sinhVienList);
-        listView.setAdapter(adapter);
+        dbHelper = new QLSinhVien_OpenHelper(this); // Khởi tạo helper cơ sở dữ liệu
+        listView = findViewById(R.id.lvSinhVien); // Lấy tham chiếu đến ListView
+        sinhVienList = new ArrayList<>(); // Khởi tạo danh sách sinh viên
+        adapter = new SinhVienAdapter(this, R.layout.item_sinhvien, sinhVienList); // Khởi tạo adapter
+        listView.setAdapter(adapter); // Đặt adapter cho ListView
+
+        // Thêm các đối tượng SINHVIEN vào danh sách ( bộ dữ liệu mẫu, nên xóa đi )
+        sinhVienList.add(new SINHVIEN("123", "Nguyễn Thanh Huy", true));
+        // Nếu sinhVien.GIOITINH là true, hiển thị hình ảnh nam (R.drawable.male)
+        // Nếu sinhVien.GIOITINH là false, hiển thị hình ảnh nữ (R.drawable.female)
 
         loadData(); // Tải dữ liệu từ cơ sở dữ liệu và hiển thị lên ListView
 
@@ -95,19 +103,24 @@ public class MainActivity extends AppCompatActivity {QLSinhVien_OpenHelper dbHel
 
     // Tải dữ liệu từ cơ sở dữ liệu và hiển thị lên ListView
     private void loadData() {
-        sinhVienList.clear(); // Xóa dữ liệu cũ trong danh sách
+        sinhVienList.clear(); // Xóa tất cả các phần tử khỏi danh sách sinhVienList để chuẩn bị cho việc tải dữ liệu mới.
         SQLiteDatabase db = dbHelper.getReadableDatabase(); // Mở cơ sở dữ liệu ở chế độ đọc
 
         // Truy vấn tất cả các sinh viên từ bảng SINHVIEN
         Cursor cursor = db.query(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null,null, null, null, null, null);
         while (cursor.moveToNext()) {
             // Lấy dữ liệu từ Cursor
-            String mssv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_MSSV));
-            String tensv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_TENSV));
-            boolean gioitinh = cursor.getInt(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_GIOITINH)) == 1;
 
-            // Thêm sinh viên vào danh sách
-            sinhVienList.add(new SINHVIEN(mssv, tensv, gioitinh));
+            // Cách 1
+//            String mssv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_MSSV));
+//            String tensv = cursor.getString(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_TENSV));
+//            boolean gioitinh = cursor.getInt(cursor.getColumnIndexOrThrow(QLSinhVien_OpenHelper.COLUMN_GIOITINH)) == 1;
+//
+//            // Thêm sinh viên vào danh sách
+//            sinhVienList.add(new SINHVIEN(mssv, tensv, gioitinh));
+
+            // Cách 2
+            sinhVienList.add(new SINHVIEN(cursor.getString(0), cursor.getString(1), cursor.getInt(2) == 1));
         }
 
         // Sắp xếp danh sách sinh viên theo MSSV
@@ -142,7 +155,9 @@ public class MainActivity extends AppCompatActivity {QLSinhVien_OpenHelper dbHel
         // Tạo một ContentValues để lưu trữ dữ liệu sinh viên
         ContentValues values = new ContentValues();
         values.put(QLSinhVien_OpenHelper.COLUMN_MSSV, mssv);
-        values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
+        values.put(QLSinhVien_OpenHelper.COLUMN_TENSV, tensv);
+        values.put(QLSinhVien_OpenHelper.COLUMN_GIOITINH, gioitinh ? 1 : 0);
+        // Nếu GIOTTINH là true, đặt giá trị 1, ngược lại đặt giá trị 0
 
         // Thêm sinh viên vào cơ sở dữ liệu
         long result = db.insert(QLSinhVien_OpenHelper.TABLE_SINHVIEN, null, values);
