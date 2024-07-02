@@ -2,7 +2,9 @@ package com.example.demodatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -246,21 +248,37 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Mở cơ sở dữ liệu ở chế độ ghi
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // Hiển thị dialog "Bạn có chắc chắn muốn xóa không"
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn có chắc chắn muốn xóa sinh viên này không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Mở cơ sở dữ liệu ở chế độ ghi
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Xóa sinh viên khỏi cơ sở dữ liệu
-        int result = db.delete(QLSinhVien_OpenHelper.TABLE_SINHVIEN, QLSinhVien_OpenHelper.COLUMN_MSSV + " = ?", new String[]{mssv});
-        db.close(); // Đóng cơ sở dữ liệu
+                // Xóa sinh viên khỏi cơ sở dữ liệu
+                int result = db.delete(QLSinhVien_OpenHelper.TABLE_SINHVIEN, QLSinhVien_OpenHelper.COLUMN_MSSV + " = ?", new String[]{mssv});
+                db.close(); // Đóng cơ sở dữ liệu
 
-        // Kiểm tra kết quả xóa sinh viên
-        if (result > 0) {
-            Toast.makeText(this, "Xóa sinh viên thành công", Toast.LENGTH_SHORT).show();
-            loadData(); // Tải lại dữ liệu và cập nhật ListView
-            clearInputFields(); // Xóa các trường nhập liệu
-        } else {
-            Toast.makeText(this, "Xóa sinh viên thất bại", Toast.LENGTH_SHORT).show();
-        }
+                // Kiểm tra kết quả xóa sinh viên
+                if (result > 0) {
+                    Toast.makeText(MainActivity.this, "Xóa sinh viên thành công", Toast.LENGTH_SHORT).show();
+                    loadData(); // Tải lại dữ liệu và cập nhật ListView
+                    clearInputFields(); // Xóa các trường nhập liệu
+                } else {
+                    Toast.makeText(MainActivity.this, "Xóa sinh viên thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     // Xóa các trường nhập liệu và reset các CheckBox
