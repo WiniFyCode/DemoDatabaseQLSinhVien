@@ -99,7 +99,28 @@ public class MainActivity extends AppCompatActivity {
                 cbNam.setEnabled(!isChecked); // Vô hiệu hóa CheckBox Nam khi CheckBox Nữ được chọn
             }
         });
+
+        // Đăng ký sự kiện click cho ListView
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            SINHVIEN sinhVien = sinhVienList.get(position); // Lấy sinh viên tại vị trí được click
+
+            // Lấy các trường nhập liệu
+            TextInputEditText edtMSSV = findViewById(R.id.edtMSSV);
+            TextInputEditText edtTENSV = findViewById(R.id.edtTENSV);
+
+            // Gán dữ liệu lên các trường nhập liệu ( gắn dữ liệu ở listview lên edit và checkbox )
+            edtMSSV.setText(sinhVien.MSSV);
+            edtTENSV.setText(sinhVien.TENSV);
+            if (sinhVien.GIOITINH) {
+                cbNam.setChecked(true);
+                cbNu.setChecked(false);
+            } else {
+                cbNam.setChecked(false);
+                cbNu.setChecked(true);
+            }
+        });
     }
+
 
     // Tải dữ liệu từ cơ sở dữ liệu và hiển thị lên ListView
     private void loadData() {
@@ -256,4 +277,5 @@ public class MainActivity extends AppCompatActivity {
         cbNam.setEnabled(true); // Kích hoạt CheckBox Nam
         cbNu.setEnabled(true); // Kích hoạt CheckBox Nữ
     }
+
 }
